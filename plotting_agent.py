@@ -31,13 +31,13 @@ repl_tool = Tool(
     func=python_repl.run,
 )
 
-query = "Give just python code for plotting 'Column1': [1, 2, 1, 4, 5] and 'Column2': [2, 3, 2, 5, 6] vs 'time' : [0, 1, 2, 3, 4]. Highlight any inflection points for a give time value for Column1 and Column2 in different colors."
+query = "Give just python code for loading the file 'test_file.csv' into a pandas dataframe, plot the columns 'is_fault' and plot the values and vertical lines of the column 'fault_code' for values where 'is_fault' is true. Plot these values versus the 'Time' column. Plot values in different colors"
 
 # chat_with_repl = chat.bind_tools([repl_tool])
 # msg = chat_with_repl.invoke(query)
 # print(msg.tool_calls)
 init_prompt = ChatPromptTemplate.from_template("You are a python code producing bot, Given the user query: {query}, Provide only the python code fo the query. Do not provide any other text")
-correction_prompt = ChatPromptTemplate.from_template("You are a python code checking bot, Given the user code: {code}, Check code for correctness. If the code is incorrect, correct it and provide a corrected version. Do not provide any other text")
+correction_prompt = ChatPromptTemplate.from_template("You are a python code checking bot, Given the user code: {code}, Check code for correctness. If the code is incorrect, correct it and provide a corrected version. Only provide code, Do not provide any other text")
 chain = init_prompt | chat |  StrOutputParser() | correction_prompt | chat | StrOutputParser() | repl_tool
 answer = chain.invoke({"query":query})
 print(answer)
